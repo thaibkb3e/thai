@@ -1,0 +1,289 @@
+CREATE DATABASE DuLieu
+GO
+USE DuLieu
+CREATE TABLE TaiKhoan (
+    Id uniqueidentifier PRIMARY KEY,
+    TenDangNhap nvarchar(50) UNIQUE NOT NULL,
+    MatKhau nvarchar(255) NOT NULL,
+    Email nvarchar(100) UNIQUE NOT NULL,
+    HoTen nvarchar(100) NOT NULL,
+    NgaySinh date,
+    GioiTinh nvarchar(10),
+    SoDienThoai nvarchar(20),
+    DiaChi nvarchar(255),
+    VaiTro nvarchar(20) NOT NULL
+);
+CREATE TABLE Admin (
+    Id uniqueidentifier PRIMARY KEY,
+    TaiKhoanId uniqueidentifier UNIQUE NOT NULL,
+    CapDoQuyen int NOT NULL,
+    FOREIGN KEY (TaiKhoanId) REFERENCES TaiKhoan(Id)
+);
+
+
+
+CREATE TABLE PhanQuyen (
+    Id uniqueidentifier PRIMARY KEY,
+    VaiTro nvarchar(20) NOT NULL,
+    Quyen nvarchar(50) NOT NULL,
+    CONSTRAINT UC_VaiTro_Quyen UNIQUE (VaiTro, Quyen)
+);
+
+
+CREATE TABLE ChuyenKhoa (
+    Id uniqueidentifier PRIMARY KEY,
+    TenChuyenKhoa nvarchar(100) NOT NULL,
+    MoTa nvarchar(max),
+    GiaKhamCoBan decimal(18,2) NOT NULL
+);
+
+CREATE TABLE BangCap (
+    Id uniqueidentifier PRIMARY KEY,
+    TenBangCap nvarchar(100) UNIQUE NOT NULL,
+    MoTa nvarchar(max),
+    HeSoLuong decimal(3,2) NOT NULL
+);
+
+CREATE TABLE BacSi (
+    Id uniqueidentifier PRIMARY KEY,
+    TaiKhoanId uniqueidentifier UNIQUE NOT NULL,
+    ChuyenKhoaId uniqueidentifier NOT NULL,
+    BangCapId uniqueidentifier NOT NULL,
+    FOREIGN KEY (TaiKhoanId) REFERENCES TaiKhoan(Id),
+    FOREIGN KEY (ChuyenKhoaId) REFERENCES ChuyenKhoa(Id),
+    FOREIGN KEY (BangCapId) REFERENCES BangCap(Id)
+);
+
+CREATE TABLE BenhNhan (
+    Id uniqueidentifier PRIMARY KEY,
+    TaiKhoanId uniqueidentifier UNIQUE NOT NULL,
+    NhomMau nvarchar(10),
+    TienSuBenh nvarchar(max),
+    DiUng nvarchar(max),
+    FOREIGN KEY (TaiKhoanId) REFERENCES TaiKhoan(Id)
+);
+
+CREATE TABLE LichLamViec (
+    Id uniqueidentifier PRIMARY KEY,
+    BacSiId uniqueidentifier NOT NULL,
+    NgayLamViec date NOT NULL,
+    GioBatDau time NOT NULL,
+    GioKetThuc time NOT NULL,
+    FOREIGN KEY (BacSiId) REFERENCES BacSi(Id)
+);
+
+CREATE TABLE LichHen (
+    Id uniqueidentifier PRIMARY KEY,
+    BenhNhanId uniqueidentifier NOT NULL,
+    ChuyenKhoaId uniqueidentifier NOT NULL,
+    BacSiId uniqueidentifier,
+    NgayGioHen datetime NOT NULL,
+    TrangThai nvarchar(20) NOT NULL,
+    LyDoKham nvarchar(max),
+    GhiChu nvarchar(max),
+    FOREIGN KEY (BenhNhanId) REFERENCES BenhNhan(Id),
+    FOREIGN KEY (ChuyenKhoaId) REFERENCES ChuyenKhoa(Id),
+    FOREIGN KEY (BacSiId) REFERENCES BacSi(Id)
+);
+
+CREATE TABLE HoSoBenhAn (
+    Id uniqueidentifier PRIMARY KEY,
+    LichHenId uniqueidentifier NOT NULL,
+    BenhNhanId uniqueidentifier NOT NULL,
+    BacSiId uniqueidentifier NOT NULL,
+    ChuyenKhoaId uniqueidentifier NOT NULL,
+    NgayKham datetime NOT NULL,
+    TrieuChung nvarchar(max),
+    ChanDoan nvarchar(max),
+    HuongDieuTri nvarchar(max),
+    KetQuaXetNghiem nvarchar(max),
+    GhiChu nvarchar(max),
+    FOREIGN KEY (LichHenId) REFERENCES LichHen(Id),
+    FOREIGN KEY (BenhNhanId) REFERENCES BenhNhan(Id),
+    FOREIGN KEY (BacSiId) REFERENCES BacSi(Id),
+    FOREIGN KEY (ChuyenKhoaId) REFERENCES ChuyenKhoa(Id)
+);
+
+CREATE TABLE ChiSoXetNghiem (
+    Id uniqueidentifier PRIMARY KEY,
+    TenChiSo nvarchar(50) NOT NULL,
+    DonViDo nvarchar(20),
+    MucBinhThuong nvarchar(100)
+);
+
+CREATE TABLE KetQuaXetNghiem (
+    Id uniqueidentifier PRIMARY KEY,
+    HoSoBenhAnId uniqueidentifier NOT NULL,
+    ChiSoXetNghiemId uniqueidentifier NOT NULL,
+    GiaTri nvarchar(255),
+    GhiChu nvarchar(max),
+    FOREIGN KEY (HoSoBenhAnId) REFERENCES HoSoBenhAn(Id),
+    FOREIGN KEY (ChiSoXetNghiemId) REFERENCES ChiSoXetNghiem(Id)
+);
+
+CREATE TABLE DonThuoc (
+    Id uniqueidentifier PRIMARY KEY,
+    HoSoBenhAnId uniqueidentifier NOT NULL,
+    NgayKe datetime NOT NULL,
+    FOREIGN KEY (HoSoBenhAnId) REFERENCES HoSoBenhAn(Id)
+);
+
+CREATE TABLE ChiTietDonThuoc (
+    Id uniqueidentifier PRIMARY KEY,
+    DonThuocId uniqueidentifier NOT NULL,
+    ThuocId uniqueidentifier NOT NULL,
+    LieuLuong nvarchar(100),
+    SoLuong int NOT NULL,
+    FOREIGN KEY (DonThuocId) REFERENCES DonThuoc(Id)
+);
+
+CREATE TABLE DichVu (
+    Id uniqueidentifier PRIMARY KEY,
+    TenDichVu nvarchar(100) NOT NULL,
+    MoTa nvarchar(max),
+    Gia decimal(18,2) NOT NULL
+);
+
+CREATE TABLE GoiKham (
+    Id uniqueidentifier PRIMARY KEY,
+    TenGoi nvarchar(100) NOT NULL,
+    MoTa nvarchar(max),
+    Gia decimal(18,2) NOT NULL,
+    NgayCapNhat datetime NOT NULL
+);
+
+CREATE TABLE ChiTietGoiKham (
+    Id uniqueidentifier PRIMARY KEY,
+    GoiKhamId uniqueidentifier NOT NULL,
+    DichVuId uniqueidentifier NOT NULL,
+    SoLuong int NOT NULL,
+    FOREIGN KEY (GoiKhamId) REFERENCES GoiKham(Id),
+    FOREIGN KEY (DichVuId) REFERENCES DichVu(Id)
+);
+
+CREATE TABLE HoaDon (
+    Id uniqueidentifier PRIMARY KEY,
+    BenhNhanId uniqueidentifier NOT NULL,
+    NgayLap datetime NOT NULL,
+    TongTien decimal(18,2) NOT NULL,
+    TrangThaiThanhToan nvarchar(20) NOT NULL,
+    GoiKhamId uniqueidentifier,
+    FOREIGN KEY (BenhNhanId) REFERENCES BenhNhan(Id),
+    FOREIGN KEY (GoiKhamId) REFERENCES GoiKham(Id)
+);
+
+CREATE TABLE GiaKham (
+    Id uniqueidentifier PRIMARY KEY,
+    ChuyenKhoaId uniqueidentifier NOT NULL,
+    BangCapId uniqueidentifier NOT NULL,
+    GiaKham decimal(18,2) NOT NULL,
+    NgayApDung date NOT NULL,
+    NgayKetThuc date,
+    FOREIGN KEY (ChuyenKhoaId) REFERENCES ChuyenKhoa(Id),
+    FOREIGN KEY (BangCapId) REFERENCES BangCap(Id)
+);
+
+CREATE TABLE ChiTietHoaDon (
+    Id uniqueidentifier PRIMARY KEY,
+    HoaDonId uniqueidentifier NOT NULL,
+    DichVuId uniqueidentifier NOT NULL,
+    SoLuong int NOT NULL,
+    DonGia decimal(18,2) NOT NULL,
+    ThanhTien decimal(18,2) NOT NULL,
+    FOREIGN KEY (HoaDonId) REFERENCES HoaDon(Id),
+    FOREIGN KEY (DichVuId) REFERENCES DichVu(Id)
+);
+
+
+-- TaiKhoan
+DECLARE @TaiKhoanId1 uniqueidentifier = NEWID();
+DECLARE @TaiKhoanId2 uniqueidentifier = NEWID();
+INSERT INTO TaiKhoan (Id, TenDangNhap, MatKhau, Email, HoTen, NgaySinh, GioiTinh, SoDienThoai, DiaChi, VaiTro)
+VALUES 
+(@TaiKhoanId1, N'bacsi1', N'nguyenvana', N'nguyenvana@gmail.com', N'Nguyễn Văn A', '1980-01-01', N'Nam', N'0123456789', N'Hà Nội', N'BácSĩ'),
+(@TaiKhoanId2, N'benhnhan1', N'tranthib', N'nguyenvana@gmail.com', N'Trần Thị B', '1990-05-15', N'Nữ', N'0987654321', N'Hồ Chí Minh', N'BệnhNhân');
+--Admin
+DECLARE @AdminTaiKhoanId uniqueidentifier = NEWID();
+INSERT INTO TaiKhoan (Id, TenDangNhap, MatKhau, Email, HoTen, NgaySinh, GioiTinh, SoDienThoai, DiaChi, VaiTro)
+VALUES (@AdminTaiKhoanId, 'admin', 'admin', 'admin@gmail.com', N'Admin Hệ Thống', '1990-01-01', N'Không xác định', '0123456789', N'Địa chỉ Admin', 'Admin');
+--Them admin vao Table Admin
+INSERT INTO Admin (Id, TaiKhoanId, CapDoQuyen)
+VALUES (NEWID(), @AdminTaiKhoanId, 1);
+-- ChuyenKhoa
+DECLARE @ChuyenKhoaId uniqueidentifier = NEWID();
+INSERT INTO ChuyenKhoa (Id, TenChuyenKhoa, MoTa, GiaKhamCoBan)
+VALUES (@ChuyenKhoaId, N'Nội Tổng Quát', N'Khám và điều trị các bệnh lý nội khoa tổng quát', '200.000');
+
+-- BangCap
+DECLARE @BangCapId uniqueidentifier = NEWID();
+INSERT INTO BangCap (Id, TenBangCap, MoTa, HeSoLuong)
+VALUES (@BangCapId, N'Bác sĩ Chuyên khoa I', N'Chứng chỉ chuyên khoa cấp I', 1.5);
+
+-- BacSi
+DECLARE @BacSiId uniqueidentifier = NEWID();
+INSERT INTO BacSi (Id, TaiKhoanId, ChuyenKhoaId, BangCapId)
+VALUES (@BacSiId, @TaiKhoanId1, @ChuyenKhoaId, @BangCapId);
+
+-- BenhNhan
+DECLARE @BenhNhanId uniqueidentifier = NEWID();
+INSERT INTO BenhNhan (Id, TaiKhoanId, NhomMau, TienSuBenh, DiUng)
+VALUES (@BenhNhanId, @TaiKhoanId2, N'A', N'Không có', N'Không có');
+
+-- LichLamViec
+INSERT INTO LichLamViec (Id, BacSiId, NgayLamViec, GioBatDau, GioKetThuc)
+VALUES (NEWID(), @BacSiId, '2024-09-06', '08:00', '17:00');
+
+-- LichHen
+DECLARE @LichHenId uniqueidentifier = NEWID();
+INSERT INTO LichHen (Id, BenhNhanId, ChuyenKhoaId, BacSiId, NgayGioHen, TrangThai, LyDoKham, GhiChu)
+VALUES (@LichHenId, @BenhNhanId, @ChuyenKhoaId, @BacSiId, '2024-09-06 09:00', N'Chờ xác nhận', N'Khám tổng quát', N'Không');
+
+-- HoSoBenhAn
+DECLARE @HoSoBenhAnId uniqueidentifier = NEWID();
+INSERT INTO HoSoBenhAn (Id, LichHenId, BenhNhanId, BacSiId, ChuyenKhoaId, NgayKham, TrieuChung, ChanDoan, HuongDieuTri, KetQuaXetNghiem, GhiChu)
+VALUES (@HoSoBenhAnId, @LichHenId, @BenhNhanId, @BacSiId, @ChuyenKhoaId, '2024-09-06 09:30', N'Sốt nhẹ, đau đầu', N'Cảm cúm thông thường', N'Nghỉ ngơi, uống nhiều nước', N'Không có', N'Tái khám sau 1 tuần nếu không đỡ');
+
+-- ChiSoXetNghiem
+DECLARE @ChiSoXetNghiemId uniqueidentifier = NEWID();
+INSERT INTO ChiSoXetNghiem (Id, TenChiSo, DonViDo, MucBinhThuong)
+VALUES (@ChiSoXetNghiemId, N'Đường huyết', N'mg/dL', N'70-100');
+
+-- KetQuaXetNghiem
+INSERT INTO KetQuaXetNghiem (Id, HoSoBenhAnId, ChiSoXetNghiemId, GiaTri, GhiChu)
+VALUES (NEWID(), @HoSoBenhAnId, @ChiSoXetNghiemId, N'85', N'Trong giới hạn bình thường');
+
+-- DonThuoc
+DECLARE @DonThuocId uniqueidentifier = NEWID();
+INSERT INTO DonThuoc (Id, HoSoBenhAnId, NgayKe)
+VALUES (@DonThuocId, @HoSoBenhAnId, '2024-09-06');
+
+-- ChiTietDonThuoc
+INSERT INTO ChiTietDonThuoc (Id, DonThuocId, ThuocId, LieuLuong, SoLuong)
+VALUES (NEWID(), @DonThuocId, NEWID(), N'1 viên/lần x 3 lần/ngày', 30);
+
+-- DichVu
+DECLARE @DichVuId uniqueidentifier = NEWID();
+INSERT INTO DichVu (Id, TenDichVu, MoTa, Gia)
+VALUES (@DichVuId, N'Khám tổng quát', N'Khám sức khỏe tổng quát', '500.000');
+
+-- GoiKham
+DECLARE @GoiKhamId uniqueidentifier = NEWID();
+INSERT INTO GoiKham (Id, TenGoi, MoTa, Gia, NgayCapNhat)
+VALUES (@GoiKhamId, N'Gói khám sức khỏe cơ bản', N'Bao gồm khám tổng quát và một số xét nghiệm cơ bản', '1.000.000', GETDATE());
+
+-- ChiTietGoiKham
+INSERT INTO ChiTietGoiKham (Id, GoiKhamId, DichVuId, SoLuong)
+VALUES (NEWID(), @GoiKhamId, @DichVuId, 1);
+
+-- HoaDon
+DECLARE @HoaDonId uniqueidentifier = NEWID();
+INSERT INTO HoaDon (Id, BenhNhanId, NgayLap, TongTien, TrangThaiThanhToan, GoiKhamId)
+VALUES (@HoaDonId, @BenhNhanId, GETDATE(), 1000000, N'Đã thanh toán', @GoiKhamId);
+
+-- GiaKham
+INSERT INTO GiaKham (Id, ChuyenKhoaId, BangCapId, GiaKham, NgayApDung, NgayKetThuc)
+VALUES (NEWID(), @ChuyenKhoaId, @BangCapId, 300000, '2024-01-01', NULL);
+
+-- ChiTietHoaDon
+INSERT INTO ChiTietHoaDon (Id, HoaDonId, DichVuId, SoLuong, DonGia, ThanhTien)
+VALUES (NEWID(), @HoaDonId, @DichVuId, 1, 500000, 500000);
