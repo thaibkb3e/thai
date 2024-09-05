@@ -20,16 +20,6 @@ CREATE TABLE Admin (
     FOREIGN KEY (TaiKhoanId) REFERENCES TaiKhoan(Id)
 );
 
-
-
-CREATE TABLE PhanQuyen (
-    Id uniqueidentifier PRIMARY KEY,
-    VaiTro nvarchar(20) NOT NULL,
-    Quyen nvarchar(50) NOT NULL,
-    CONSTRAINT UC_VaiTro_Quyen UNIQUE (VaiTro, Quyen)
-);
-
-
 CREATE TABLE ChuyenKhoa (
     Id uniqueidentifier PRIMARY KEY,
     TenChuyenKhoa nvarchar(100) NOT NULL,
@@ -202,13 +192,15 @@ INSERT INTO TaiKhoan (Id, TenDangNhap, MatKhau, Email, HoTen, NgaySinh, GioiTinh
 VALUES 
 (@TaiKhoanId1, N'bacsi1', N'nguyenvana', N'nguyenvana@gmail.com', N'Nguyễn Văn A', '1980-01-01', N'Nam', N'0123456789', N'Hà Nội', N'BácSĩ'),
 (@TaiKhoanId2, N'benhnhan1', N'tranthib', N'nguyenvana@gmail.com', N'Trần Thị B', '1990-05-15', N'Nữ', N'0987654321', N'Hồ Chí Minh', N'BệnhNhân');
---Admin
-DECLARE @AdminTaiKhoanId uniqueidentifier = NEWID();
-INSERT INTO TaiKhoan (Id, TenDangNhap, MatKhau, Email, HoTen, NgaySinh, GioiTinh, SoDienThoai, DiaChi, VaiTro)
-VALUES (@AdminTaiKhoanId, 'admin', 'admin', 'admin@gmail.com', N'Admin Hệ Thống', '1990-01-01', N'Không xác định', '0123456789', N'Địa chỉ Admin', 'Admin');
+
+
+
 --Them admin vao Table Admin
 INSERT INTO Admin (Id, TaiKhoanId, CapDoQuyen)
 VALUES (NEWID(), @AdminTaiKhoanId, 1);
+
+
+
 -- ChuyenKhoa
 DECLARE @ChuyenKhoaId uniqueidentifier = NEWID();
 INSERT INTO ChuyenKhoa (Id, TenChuyenKhoa, MoTa, GiaKhamCoBan)
