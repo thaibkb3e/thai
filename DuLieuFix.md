@@ -262,12 +262,11 @@ VALUES
 -- HoSoBenhAn
 INSERT INTO HoSoBenhAn (NgayKham, ChuanDoan, HuongDieuTri, GhiChu, KetQuaXetNghiem, ID_BenhNhan)
 VALUES 
-('2024-09-06', N'Viêm xoang', N'Uống thuốc và nghỉ ngơi', N'Tái khám sau 1 tuần', N'Không có', 1),
-('2024-09-06', N'Viêm dạ dày', N'Điều trị nội khoa', N'Cần theo dõi', N'Cần xét nghiệm thêm', 2),
-('2024-09-07', N'Cúm mùa', N'Uống thuốc và nghỉ ngơi', N'Cách ly tại nhà', N'Dương tính với virus cúm', 3),
-('2024-09-07', N'Viêm phế quản', N'Kháng sinh và thuốc ho', N'Tái khám sau 5 ngày', N'Cần chụp X-quang phổi', 4),
-('2024-09-08', N'Rối loạn nhịp tim', N'Thuốc điều hòa nhịp tim', N'Theo dõi sát', N'ECG bất thường', 5);
-
+('2024-09-06', N'Viêm xoang', N'Uống thuốc và nghỉ ngơi', N'Tái khám sau 1 tuần', 0, 1),
+('2024-09-06', N'Viêm dạ dày', N'Điều trị nội khoa', N'Cần theo dõi', 1, 2),
+('2024-09-07', N'Cúm mùa', N'Uống thuốc và nghỉ ngơi', N'Cách ly tại nhà', 1, 3),
+('2024-09-07', N'Viêm phế quản', N'Kháng sinh và thuốc ho', N'Tái khám sau 5 ngày', 0, 4),
+('2024-09-08', N'Rối loạn nhịp tim', N'Thuốc điều hòa nhịp tim', N'Theo dõi sát', 1, 5);
 -- ChiSoXetNghiem
 INSERT INTO ChiSoXetNghiem (TenChiSo, DonViDo, MucBinhThuong)
 VALUES 
@@ -368,11 +367,3 @@ SET KetQuaXetNghiem =
     END;
 
 -- DELETE FROM HoSoBenhAn;
-
-INSERT INTO HoSoBenhAn (NgayKham, ChuanDoan, HuongDieuTri, GhiChu, KetQuaXetNghiem, ID_BenhNhan)
-VALUES 
-('2024-09-06', N'Viêm xoang', N'Uống thuốc và nghỉ ngơi', N'Tái khám sau 1 tuần', 0, 1),
-('2024-09-06', N'Viêm dạ dày', N'Điều trị nội khoa', N'Cần theo dõi', 1, 2),
-('2024-09-07', N'Cúm mùa', N'Uống thuốc và nghỉ ngơi', N'Cách ly tại nhà', 1, 3),
-('2024-09-07', N'Viêm phế quản', N'Kháng sinh và thuốc ho', N'Tái khám sau 5 ngày', 1, 4),
-('2024-09-08', N'Rối loạn nhịp tim', N'Thuốc điều hòa nhịp tim', N'Theo dõi sát', 1, 5);
