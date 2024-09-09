@@ -212,11 +212,11 @@ VALUES
 -- BenhNhan
 INSERT INTO BenhNhan (TienSuBenh, DiUng, ID_TaiKhoan)
 VALUES 
-(N'Không có', N'Không có', 3),
+(N'Không có', N'Không có', 4),
 (N'Tiểu đường', N'Penicillin', 5),
-(N'Huyết áp cao', N'Hải sản', 3),
+(N'Huyết áp cao', N'Hải sản', 4),
 (N'Hen suyễn', N'Bụi nhà', 5),
-(N'Không có', N'Lactose', 3);
+(N'Không có', N'Lactose', 4);
 
 -- BangCap
 INSERT INTO BangCap (TenBangCap, MoTa, HeSoLuong)
@@ -240,9 +240,9 @@ VALUES
 INSERT INTO BacSi (MoTa, ID_BangCap, ID_TaiKhoan, ID_ChuyenKhoa)
 VALUES 
 (N'Bác sĩ nội khoa với 10 năm kinh nghiệm', 1, 2, 1),
-(N'Bác sĩ phẫu thuật tim', 3, 4, 5),
+(N'Bác sĩ phẫu thuật tim', 3, 3, 5),
 (N'Bác sĩ sản khoa', 2, 2, 3),
-(N'Bác sĩ nhi khoa', 4, 4, 4),
+(N'Bác sĩ nhi khoa', 4, 3, 4),
 (N'Bác sĩ chuyên khoa tim mạch', 5, 2, 5);
 -- LichLamViec
 INSERT INTO LichLamViec (NgayLamViec, ThoiGianBatDau, ThoiGianKetThuc, TrangThai, ID_BacSi)
