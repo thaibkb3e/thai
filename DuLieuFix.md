@@ -92,7 +92,7 @@ CREATE TABLE HoSoBenhAn (
     ChuanDoan NVARCHAR(MAX),
     HuongDieuTri NVARCHAR(MAX),
     GhiChu NVARCHAR(MAX),
-    KetQuaXetNghiem NVARCHAR(MAX),
+    KetQuaXetNghiem BIT,
     ID_BenhNhan INT,
     FOREIGN KEY (ID_BenhNhan) REFERENCES BenhNhan(ID_BenhNhan)
 );
